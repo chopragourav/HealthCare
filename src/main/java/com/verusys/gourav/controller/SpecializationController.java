@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.verusys.gourav.entity.Specialization;
+import com.verusys.gourav.exception.SpecializationNotFoundException;
 import com.verusys.gourav.service.ISpecializationService;
 
 @Controller
@@ -66,8 +67,13 @@ public class SpecializationController {
 	 */
 	@GetMapping("/delete")
 	public String deleteSpec(@RequestParam Long id, RedirectAttributes attribute) {
-		service.removeSpecialization(id);
-		attribute.addAttribute("message", "Record id (" + id + ") is removed");
+		try {
+			service.removeSpecialization(id);
+			attribute.addAttribute("message", "Record id (" + id + ") is removed");
+		} catch (SpecializationNotFoundException e) {
+			e.printStackTrace();
+			attribute.addAttribute("message", e.getMessage());
+		}
 		return "redirect:all";
 	}
 
@@ -79,10 +85,18 @@ public class SpecializationController {
 	 * @return
 	 */
 	@GetMapping("/edit")
-	public String showEditPage(@RequestParam Long id, Model model) {
-		Specialization spec = service.getOneSpecialization(id);
-		model.addAttribute("specialization", spec);
-		return "SpecializationEdit";
+	public String showEditPage(@RequestParam Long id, Model model, RedirectAttributes attribute) {
+		String page = null;
+		try {
+			Specialization spec = service.getOneSpecialization(id);
+			model.addAttribute("specialization", spec);
+			page = "SpecializationEdit";
+		} catch (SpecializationNotFoundException e) {
+			e.printStackTrace();
+			attribute.addAttribute("message", e.getMessage());
+			page = "redirect:all";
+		}
+		return page;
 	}
 
 	/**
