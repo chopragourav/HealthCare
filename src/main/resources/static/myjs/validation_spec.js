@@ -23,6 +23,11 @@ $(document).ready(function() {
 			$("#specCodeError").css("color", "red");
 			return specCodeError = false;
 		} else {
+			var id = 0; //for register
+			if ($("#id").val() != undefined) { //edit page
+				specCodeError = true;
+				id = $("#id").val();
+			}
 			$.ajax({
 				url: 'checkCode',
 				data: { "code": val },
@@ -40,6 +45,7 @@ $(document).ready(function() {
 			});
 		}
 		return specCodeError;
+
 	}
 
 	function validat_specName() {
@@ -56,6 +62,10 @@ $(document).ready(function() {
 			$("#specNameError").css("color", "red");
 			return specNameError = false;
 		} else {
+			$("#specNameError").hide();
+			specNameError = true;
+		}
+		/*else {
 			$.ajax({
 				url: 'checkName',
 				data: { "name": val },
@@ -71,7 +81,7 @@ $(document).ready(function() {
 					}
 				}
 			});
-		}
+		}*/
 		return specNameError;
 	}
 	function validat_specNote() {

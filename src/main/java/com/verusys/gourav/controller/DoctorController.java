@@ -7,33 +7,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.verusys.gourav.entity.Specialization;
-import com.verusys.gourav.exception.SpecializationNotFoundException;
-import com.verusys.gourav.service.ISpecializationService;
-import com.verusys.gourav.view.SpecializationExcelView;
+import com.verusys.gourav.entity.Doctor;
+import com.verusys.gourav.exception.DoctorNotFoundException;
+import com.verusys.gourav.service.IDoctorService;
 
 @Controller
-@RequestMapping("/spec")
-public class SpecializationController {
+@RequestMapping("/doctor")
+public class DoctorController {
 	@Autowired
-	private ISpecializationService service;
+	private IDoctorService service;
 
 	/**
-	 * 1. show specialization Form
+	 * 1. show Doctor Form
 	 */
 	@GetMapping("/register")
-	public String displayRegister() {
-		return "specializationRegister";
+	public String displayRegister(@RequestParam(value = "messge", required = false) String message, Model model) {
+		model.addAttribute("message", message);
+		return "doctorRegister";
 	}
 
 	/**
@@ -41,25 +36,24 @@ public class SpecializationController {
 	 * 
 	 */
 	@PostMapping("/save")
-	public String saveForm(@ModelAttribute Specialization Specialization, Model model) {
-		Long id = service.saveSpecialization(Specialization);
+	public String saveForm(@ModelAttribute Doctor Doctor, Model model) {
+		Long id = service.saveDoctor(Doctor);
 		String message = "Record id (" + id + ") is created";
-		model.addAttribute("message", message);
-		return "SpecializationRegister";
+		return "DoctorRegister";
 	}
 
 	/**
-	 * 3. display all Specialization
+	 * 3. display all Doctor
 	 * 
 	 * @param model
 	 * @return
 	 */
 	@GetMapping("/all")
 	public String viewAll(Model model, @RequestParam(value = "message", required = false) String message) {
-		List<Specialization> specList = service.getAllSpecializations();
-		model.addAttribute("list", specList);
+		List<Doctor> list = service.getAllDoctors();
+		model.addAttribute("list", list);
 		model.addAttribute("message", message);
-		return "SpecializationData";
+		return "DoctorData";
 	}
 
 	/**
@@ -72,9 +66,9 @@ public class SpecializationController {
 	@GetMapping("/delete")
 	public String deleteSpec(@RequestParam("id") Long id, RedirectAttributes attribute) {
 		try {
-			service.removeSpecialization(id);
+			service.removeDoctor(id);
 			attribute.addAttribute("message", "Record id (" + id + ") is removed");
-		} catch (SpecializationNotFoundException e) {
+		} catch (DoctorNotFoundException e) {
 			e.printStackTrace();
 			attribute.addAttribute("message", e.getMessage());
 		}
@@ -89,15 +83,15 @@ public class SpecializationController {
 	 * @return
 	 */
 	@GetMapping("/edit")
-	public String showEditPage(@RequestParam Long id, Model model, RedirectAttributes attribute) {
+	public String showEditPage(@RequestParam("id") Long id, Model model, RedirectAttributes attributes) {
 		String page = null;
 		try {
-			Specialization spec = service.getOneSpecialization(id);
-			model.addAttribute("specialization", spec);
-			page = "SpecializationEdit";
-		} catch (SpecializationNotFoundException e) {
+			Doctor doc = service.getOneDoctor(id);
+			model.addAttribute("doctor", doc);
+			page = "DoctorEdit";
+		} catch (DoctorNotFoundException e) {
 			e.printStackTrace();
-			attribute.addAttribute("message", e.getMessage());
+			attributes.addAttribute("message", e.getMessage());
 			page = "redirect:all";
 		}
 		return page;
@@ -106,22 +100,22 @@ public class SpecializationController {
 	/**
 	 * 6. update data
 	 * 
-	 * @param specialization
+	 * @param Doctor
 	 * @param attribute
 	 * @return
 	 */
 	@PostMapping("/update")
-	public String updateData(@ModelAttribute Specialization specialization, RedirectAttributes attribute) {
-		service.updateSpecialization(specialization);
-		attribute.addAttribute("message", "Record id (" + specialization.getId() + ") is updated");
+	public String updateData(@ModelAttribute Doctor doctor, RedirectAttributes attribute) {
+		service.updateDoctor(doctor);
+		attribute.addAttribute("message", "Record id (" + doctor.getId() + ") is updated");
 		return "redirect:all";
 	}
 
 	/**
 	 * 7. read code and check with service and return back to same ui
 	 */
-	@GetMapping("/checkCode")
-	public String validSpecCode(@RequestParam String code, @RequestParam Long id) {
+	/*@GetMapping("/checkCode")
+	public String validSpecCode(@RequestParam String code, @RequestParam("id") Long id) {
 		String message="";
 			if(id==0 && service.isSpecCodeExist(code)) {
 				message=code+" , already exist";
@@ -129,7 +123,7 @@ public class SpecializationController {
 				message=code+" , already exist";
 			}
 		return message;
-	}
+	}*/
 	/*@GetMapping("/checkCode")
 	@ResponseBody
 	public String validateSpecCode(@RequestParam String code) {
@@ -174,16 +168,16 @@ public class SpecializationController {
 	/***
 	 * 9. export data to excel file
 	 */
-	@GetMapping("/excel")
+	/*@GetMapping("/excel")
 	public ModelAndView exportToExcel() {
 		ModelAndView mav = new ModelAndView();
-		mav.setView(new SpecializationExcelView());
-
+		mav.setView(new DoctorExcelView());
+	
 		// read data from DB
-		List<Specialization> list = service.getAllSpecializations();
+		List<Doctor> list = service.getAllDoctors();
 		// send to Excel Impl class
 		mav.addObject("list", list);
-
+	
 		return mav;
-	}
+	}*/
 }
