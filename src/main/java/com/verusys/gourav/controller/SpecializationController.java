@@ -120,7 +120,7 @@ public class SpecializationController {
 	/**
 	 * 7. read code and check with service and return back to same ui
 	 */
-	@GetMapping("/checkCode")
+	/*@GetMapping("/checkCode")
 	public String validSpecCode(@RequestParam String code, @RequestParam Long id) {
 		String message="";
 			if(id==0 && service.isSpecCodeExist(code)) {
@@ -129,7 +129,7 @@ public class SpecializationController {
 				message=code+" , already exist";
 			}
 		return message;
-	}
+	}*/
 	/*@GetMapping("/checkCode")
 	@ResponseBody
 	public String validateSpecCode(@RequestParam String code) {
@@ -144,7 +144,7 @@ public class SpecializationController {
 	return message; // this is not viewName(it is message)
 	}*/
 
-	/*@GetMapping("/checkCode")
+	@GetMapping("/checkCode")
 	@ResponseBody
 	public String validateSpecCode(@RequestParam String code, @RequestParam Long id) {
 		String message = "";
@@ -156,7 +156,7 @@ public class SpecializationController {
 			}
 		}
 		return message; // this is not viewName(it is message)
-	}*/
+	}
 
 	/**
 	 * 8. read Name and check with service and return back to same ui

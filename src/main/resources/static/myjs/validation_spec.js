@@ -30,7 +30,7 @@ $(document).ready(function() {
 			}
 			$.ajax({
 				url: 'checkCode',
-				data: { "code": val },
+				data: { "code": val, "id":id},
 				success: function(resTxt) {
 					if (resTxt != '') {
 						$("#specCodeError").show();

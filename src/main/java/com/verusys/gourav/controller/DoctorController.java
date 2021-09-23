@@ -1,20 +1,24 @@
 package com.verusys.gourav.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.verusys.gourav.entity.Doctor;
 import com.verusys.gourav.exception.DoctorNotFoundException;
 import com.verusys.gourav.service.IDoctorService;
+import com.verusys.gourav.util.FileUploadUtil;
 
 @Controller
 @RequestMapping("/doctor")
@@ -35,10 +39,28 @@ public class DoctorController {
 	 * 2. On Submit Form save data
 	 * 
 	 */
+	/*@PostMapping("/save")
+	public String saveForm(@ModelAttribute Doctor doctor, 
+			@RequestParam("docImg") MultipartFile multipartFile,
+			Model model) {
+		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+		doctor.setPhotos(fileName);
+	
+		Long id = service.saveDoctor(doctor);
+		model.addAttribute("message", "Record id (" + id + ") is created");
+		String uploadDir = "user-photos/" + id;
+		try {
+			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "DoctorRegister";
+	}*/
+
 	@PostMapping("/save")
 	public String saveForm(@ModelAttribute Doctor Doctor, Model model) {
 		Long id = service.saveDoctor(Doctor);
-		String message = "Record id (" + id + ") is created";
+		model.addAttribute("message", "Record id (" + id + ") is created");
 		return "DoctorRegister";
 	}
 
