@@ -14,10 +14,25 @@
 	<div class="container">
 		<div class="card">
 			<div class="card-header bg-primary text-center text-white">
-				<h3>Doctor Register</h3>
+				<h3>Doctor Registration</h3>
 			</div>
 			<div class="card-body">
 				<form th:action="@{/doctor/save}" method="POST">
+					<!-- row#8 -->
+					<div class="row">
+						<div class="col-2">
+							<label for="photoLoc">Image</label>
+						</div>
+						<div class="col-4">
+							<input type="file" name="fileOb" id="fileOb" class="form-control"
+								onchange="uploadFile()" /> <input type="hidden" id="photoLoc"
+								name="photoLoc" />
+						</div>
+						<div class="col-6">
+							<span id="photoLocError"></span>
+						</div>
+					</div>
+					<br>
 					<!-- row#1 -->
 					<div class="row">
 						<div class="col-2">
@@ -56,6 +71,24 @@
 						</div>
 						<div class="col-6">
 							<span id="emailError"></span>
+						</div>
+					</div>
+					&nbsp;
+					<!-- row#Dynamic -->
+					<div class="row">
+						<div class="col-2">
+							<label for="specialization">Specialization</label>
+						</div>
+						<div class="col-4">
+							<select name="specialization.id" id="specialization"
+								class="form-control">
+								<option value="">-SELECT-</option>
+								<option th:each="ob:${specializations}" th:value="${ob.key}"
+									th:text="${ob.value}"></option>
+							</select>
+						</div>
+						<div class="col-6">
+							<span id="specializationError"></span>
 						</div>
 					</div>
 					&nbsp;
@@ -125,6 +158,7 @@
 							<span id="photosError"></span>
 						</div>
 					</div> -->
+					&nbsp;
 					<button type="submit" class="btn btn-success">
 						Create <i class="fa fa-plus-square" aria-hidden="true"></i>
 					</button>
@@ -135,5 +169,6 @@
 			</div>
 		</div>
 	</div>
+	<script th:src="@{/myjs/uploadImgBb.js}"></script>
 </body>
 </html>

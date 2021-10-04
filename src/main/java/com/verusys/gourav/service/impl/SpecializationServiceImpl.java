@@ -1,6 +1,7 @@
 package com.verusys.gourav.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import com.verusys.gourav.entity.Specialization;
 import com.verusys.gourav.exception.SpecializationNotFoundException;
 import com.verusys.gourav.repository.ISpecializationRepo;
 import com.verusys.gourav.service.ISpecializationService;
+import com.verusys.gourav.util.MyCollectionsUtil;
 
 @Service
 public class SpecializationServiceImpl implements ISpecializationService {
@@ -53,6 +55,13 @@ public class SpecializationServiceImpl implements ISpecializationService {
 		boolean exist = count>0 ? true : false;
 		return exist;*/
 		return repo.getSpecCodeCount(specCode) > 0;
+	}
+	
+	@Override
+	public Map<Long, String> getSpecIdAndName() {
+		List<Object[]> list = repo.getSpecIdAndName();
+		Map<Long, String> map=MyCollectionsUtil.convertToMap(list);
+		return map;
 	}
 
 	/*@Override

@@ -1,6 +1,7 @@
 package com.verusys.gourav.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.verusys.gourav.entity.Specialization;
 
@@ -14,6 +15,8 @@ public interface ISpecializationService {
 	public boolean isSpecCodeExist(String specCode);
 	
 	public boolean isSpecCodeExistForEdit(String specCode, Long id);
+	
+	Map<Long, String>getSpecIdAndName();
 	
 //	public boolean isSpecCodeExistForEdit(String specCode, Long id);
 	

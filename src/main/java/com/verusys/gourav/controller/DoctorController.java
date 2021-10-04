@@ -1,37 +1,46 @@
 package com.verusys.gourav.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.verusys.gourav.entity.Doctor;
 import com.verusys.gourav.exception.DoctorNotFoundException;
 import com.verusys.gourav.service.IDoctorService;
-import com.verusys.gourav.util.FileUploadUtil;
+import com.verusys.gourav.service.ISpecializationService;
+import com.verusys.gourav.util.MyMailUtil;
 
 @Controller
 @RequestMapping("/doctor")
 public class DoctorController {
 	@Autowired
 	private IDoctorService service;
+	
+	@Autowired
+	private MyMailUtil mailUtil;
+	
+	@Autowired
+	private ISpecializationService specializationService;
 
+	private void createDynamicUI(Model model) {
+		model.addAttribute("specializations", specializationService.getSpecIdAndName());
+	}
 	/**
 	 * 1. show Doctor Form
 	 */
 	@GetMapping("/register")
 	public String displayRegister(@RequestParam(value = "messge", required = false) String message, Model model) {
 		model.addAttribute("message", message);
+		createDynamicUI(model);
 		return "doctorRegister";
 	}
 
@@ -60,7 +69,19 @@ public class DoctorController {
 	@PostMapping("/save")
 	public String saveForm(@ModelAttribute Doctor Doctor, Model model) {
 		Long id = service.saveDoctor(Doctor);
-		model.addAttribute("message", "Record id (" + id + ") is created");
+		String message = "Doctor ("+id+") is created";
+		model.addAttribute("message", message);
+		if(id!=null) {
+			new Thread(new Runnable() {
+				public void run() {
+					mailUtil.send(
+							Doctor.getEmail(), 
+							"SUCCESS", 
+							message,
+							new ClassPathResource("/static/myres/sample.pdf"));
+				}
+			}).start();
+		}
 		return "DoctorRegister";
 	}
 
@@ -110,6 +131,7 @@ public class DoctorController {
 		try {
 			Doctor doc = service.getOneDoctor(id);
 			model.addAttribute("doctor", doc);
+			createDynamicUI(model);
 			page = "DoctorEdit";
 		} catch (DoctorNotFoundException e) {
 			e.printStackTrace();

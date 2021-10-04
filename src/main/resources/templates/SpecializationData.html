@@ -33,7 +33,7 @@
 						<td th:text="${ob.specCode}"></td>
 						<td th:text="${ob.specName}"></td>
 						<td th:text="${ob.specNote}"></td>
-						<td><a th:href="@{/spec/delete(id=${ob.id})}"
+						<td><a th:href="@{/spec/delete(id=${ob.id})}" onclick="confirm('Do you want to delete it?')"
 							class="btn btn-danger">DELETE <i class="fa fa-trash-o"
 								aria-hidden="true"></i>
 						</a> | <a th:href="@{/spec/edit(id=${ob.id})}" class="btn btn-warning">EDIT
