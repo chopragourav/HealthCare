@@ -27,7 +27,7 @@ public class PatientController {
 		model.addAttribute("patient", new Patient());
 		return "PatientRegister";
 	}
-	@PostMapping("/register")
+	@PostMapping("/save")
 	public String savePatient(@ModelAttribute Patient patient, Model model) {
 		java.lang.Long id=service.savePatient(patient);
 		model.addAttribute("message","Patient created with Id:"+id);

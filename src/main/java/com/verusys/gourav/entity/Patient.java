@@ -46,6 +46,9 @@ public class Patient {
 	@Column(name = "pat_phone_col")
 	private String phone;
 	
+	@Column(name = "pat_email_col")
+	private String email;
+	
 	@DateTimeFormat(iso = ISO.DATE)
 	@Temporal(TemporalType.DATE)
 	@Column(name = "pat_dob_col")

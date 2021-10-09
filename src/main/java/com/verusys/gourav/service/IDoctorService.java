@@ -1,6 +1,7 @@
 package com.verusys.gourav.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.verusys.gourav.entity.Doctor;
 
@@ -19,4 +20,5 @@ public interface IDoctorService {
 	
 	
 	//public boolean isdocNameExist(String docName);
+	Map<Long, String> getDocIdAndName();
 }

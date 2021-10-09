@@ -38,7 +38,7 @@ public class DoctorController {
 	 * 1. show Doctor Form
 	 */
 	@GetMapping("/register")
-	public String displayRegister(@RequestParam(value = "messge", required = false) String message, Model model) {
+	public String displayRegister(@RequestParam(value = "message", required = false) String message, Model model) {
 		model.addAttribute("message", message);
 		createDynamicUI(model);
 		return "doctorRegister";
@@ -67,7 +67,8 @@ public class DoctorController {
 	}*/
 
 	@PostMapping("/save")
-	public String saveForm(@ModelAttribute Doctor Doctor, Model model) {
+	public String saveForm(@ModelAttribute Doctor Doctor, 
+			Model model) {
 		Long id = service.saveDoctor(Doctor);
 		String message = "Doctor ("+id+") is created";
 		model.addAttribute("message", message);
@@ -92,7 +93,8 @@ public class DoctorController {
 	 * @return
 	 */
 	@GetMapping("/all")
-	public String viewAll(Model model, @RequestParam(value = "message", required = false) String message) {
+	public String viewAll(Model model, 
+			@RequestParam(value = "message", required = false) String message) {
 		List<Doctor> list = service.getAllDoctors();
 		model.addAttribute("list", list);
 		model.addAttribute("message", message);
@@ -110,7 +112,7 @@ public class DoctorController {
 	public String deleteSpec(@RequestParam("id") Long id, RedirectAttributes attribute) {
 		try {
 			service.removeDoctor(id);
-			attribute.addAttribute("message", "Record id (" + id + ") is removed");
+			attribute.addAttribute("message", "Record with (" + id + ") is removed");
 		} catch (DoctorNotFoundException e) {
 			e.printStackTrace();
 			attribute.addAttribute("message", e.getMessage());
@@ -151,7 +153,7 @@ public class DoctorController {
 	@PostMapping("/update")
 	public String updateData(@ModelAttribute Doctor doctor, RedirectAttributes attribute) {
 		service.updateDoctor(doctor);
-		attribute.addAttribute("message", "Record id (" + doctor.getId() + ") is updated");
+		attribute.addAttribute("message", "Record with (" + doctor.getId() + ") is updated");
 		return "redirect:all";
 	}
 
