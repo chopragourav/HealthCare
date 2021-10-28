@@ -47,7 +47,9 @@
 							<label for="date">Date</label>
 						</div>
 						<div class="col-4">
-							<input type="date" th:field="*{date}" class="form-control" />
+							<!-- <input type="date" name="date" id="date" class="form-control" /> -->
+							<input type="text" name="date" id="date"
+								class="form-control datepicker" autocomplete="off" readonly />
 						</div>
 						<div class="col-6" id="dateError"></div>
 					</div>
@@ -84,8 +86,7 @@
 							<label for="consultationFee">Consultation Fee</label>
 						</div>
 						<div class="col-4">
-							<input type="text" th:field="*{consultationFee}"
-								class="form-control" />
+							<input type="text" th:field="*{fee}" class="form-control" />
 						</div>
 						<div class="col-6">
 							<span id="consultationFeeError"></span>
@@ -102,5 +103,10 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		$('.datepicker').datepicker({
+			startDate : new Date()
+		})
+	</script>
 </body>
 </html>

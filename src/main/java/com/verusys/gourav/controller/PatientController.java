@@ -21,15 +21,16 @@ import com.verusys.gourav.service.IPatientService;
 public class PatientController {
 	@Autowired
 	private IPatientService service;
-	
+
 	@GetMapping("/register")
 	public String registerPatient(Model model) {
-		model.addAttribute("patient", new Patient());
+		model.addAttribute("patient",new Patient());
 		return "PatientRegister";
 	}
+
 	@PostMapping("/save")
 	public String savePatient(@ModelAttribute Patient patient, Model model) {
-		java.lang.Long id=service.savePatient(patient);
+		Long id=service.savePatient(patient);
 		model.addAttribute("message","Patient created with Id:"+id);
 		model.addAttribute("patient",new Patient()) ;
 		return "PatientRegister";

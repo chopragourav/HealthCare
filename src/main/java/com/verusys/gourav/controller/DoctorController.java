@@ -77,7 +77,7 @@ public class DoctorController {
 				public void run() {
 					mailUtil.send(
 							Doctor.getEmail(), 
-							"SUCCESS", 
+							"Doctor created successfully", 
 							message,
 							new ClassPathResource("/static/myres/sample.pdf"));
 				}

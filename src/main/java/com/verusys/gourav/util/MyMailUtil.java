@@ -13,35 +13,43 @@ public class MyMailUtil {
 
 	@Autowired
 	private JavaMailSender mailSender;
-
-	public boolean send(String to[], String cc[], String bcc[], String subject, String text, Resource files[]) {
+	
+	public boolean send(
+			String to[],
+			String cc[],
+			String bcc[],
+			String subject,
+			String text,
+			Resource files[]
+			) 
+	{
 		boolean sent = false;
 		try {
-			// 1. create one empty message object
+			//1. create one empty message object
 			MimeMessage message = mailSender.createMimeMessage();
-
-			// 2. fill details (message, attachmentExist?)
-			MimeMessageHelper helper = new MimeMessageHelper(message, files != null && files.length > 0);
-
+			
+			//2. fill details (message, attachmentExist?)
+			MimeMessageHelper helper = new MimeMessageHelper(message, files!=null && files.length>0);
+			
 			helper.setTo(to);
-
-			if (cc != null)
+			
+			if(cc!=null)
 				helper.setCc(cc);
-			if (bcc != null)
+			if(bcc!=null)
 				helper.setBcc(bcc);
-
+			
 			helper.setSubject(subject);
 			helper.setText(text);
-
-			if (files != null) {
-				for (Resource rob : files) {
+			
+			if(files!=null) {
+				for(Resource rob: files) {
 					helper.addAttachment(rob.getFilename(), rob);
 				}
 			}
-
-			// 3. send email
+			
+			//3. send email
 			mailSender.send(message);
-
+			
 			sent = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -49,13 +57,28 @@ public class MyMailUtil {
 		}
 		return sent;
 	}
-
-	/** overloaded methods */
-	public boolean send(String to, String subject, String text, Resource file) {
-		return send(new String[] { to }, null, null, subject, text, file != null ? new Resource[] { file } : null);
+	
+	/** overloaded methods*/
+	public boolean send(
+			String to,
+			String subject,
+			String text,
+			Resource file
+			) 
+	{
+		return send(
+				new String[] {to}, 
+				null,null, 
+				subject, text, 
+				file!=null?new Resource[] {file}:null);
 	}
-
-	public boolean send(String to, String subject, String text) {
-		return send(to, subject, text, null);
+	
+	public boolean send(
+			String to,
+			String subject,
+			String text
+			)
+	{
+		return send(to, subject, text,null);
 	}
 }

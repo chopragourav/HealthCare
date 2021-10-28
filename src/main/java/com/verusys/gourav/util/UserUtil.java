@@ -6,12 +6,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserUtil {
-	public String getPwd() {
+
+	public String genPwd() {
 		return UUID.randomUUID()
 				.toString()
-				.replace("-", "")
-				.substring(0, 8)
-				;
-
+				.replace("-","")
+				.substring(0, 8);
 	}
 }

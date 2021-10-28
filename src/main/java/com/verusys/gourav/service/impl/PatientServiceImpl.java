@@ -12,6 +12,7 @@ import com.verusys.gourav.exception.PatientNotFoundException;
 import com.verusys.gourav.repository.PatientRepo;
 import com.verusys.gourav.service.IPatientService;
 import com.verusys.gourav.service.IUserService;
+import com.verusys.gourav.util.MyMailUtil;
 import com.verusys.gourav.util.UserUtil;
 
 @Service
@@ -19,22 +20,36 @@ public class PatientServiceImpl implements IPatientService {
 
 	@Autowired
 	private PatientRepo repo;
-	
+
 	@Autowired
 	private IUserService userservice;
-	
+
 	@Autowired
 	private UserUtil util;
 
+	@Autowired
+	private MyMailUtil mailUtil;
+
 	@Override
 	public Long savePatient(Patient patient) {
-		Long id=repo.save(patient).getId();
-		if(id!=null) {
-			User user=new User();
-			user.setDisplayName(patient.getFirstName()+" "+patient.getLastName());
+		Long id = repo.save(patient).getId();
+		if (id != null) {
+			String pwd = util.genPwd();
+			User user = new User();
+			user.setDisplayName(patient.getFirstName() + " " + patient.getLastName());
 			user.setUserName(patient.getEmail());
-			user.setPassword(util.getPwd());
-			user.setRole(UserRoles.DOCTOR.name());
+			user.setPassword(pwd);
+			user.setRole(UserRoles.PATIENT.name());
+			Long genId = userservice.saveUser(user);
+			if (genId != null)
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						String text = "Your username is "+patient.getEmail()+" and password is "+pwd;
+						mailUtil.send(patient.getEmail(), "Patient Added", text);
+					}
+				}).start();
 		}
 		return id;
 	}

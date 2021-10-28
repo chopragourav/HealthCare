@@ -30,21 +30,21 @@ public class Appointment {
 	@GeneratedValue
 	@Column(name = "app_id_col")
 	private Long id;
-	
-	@DateTimeFormat(iso = ISO.DATE)
+
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Temporal(TemporalType.DATE)
 	@Column(name = "app_date_col")
 	private Date date;
-	
+
 	@Column(name = "app_slots_col")
 	private Integer noOfSlots;
-	
+
 	@Column(name = "app_details_col")
 	private String details;
-	
+
 	@Column(name = "app_fee_col")
-	private Float consultationFee; 
-	
+	private Float fee;
+
 	@ManyToOne
 	@JoinColumn(name = "app_id_fk_col")
 	private Doctor doctor;

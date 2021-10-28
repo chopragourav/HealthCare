@@ -22,4 +22,7 @@ public interface IDoctorRepo extends JpaRepository<Doctor, Long> {
 	Integer getSpecCodeCountForEdit(String specCode, Long id);*/
 	@Query("SELECT id,firstName,lastName FROM Doctor")
 	List<Object[]> getDocIdAndName();
+
+	@Query("SELECT doct FROM Doctor doct INNER JOIN doct.specialization as spc WHERE spc.id=:specId")
+	public List<Doctor> findDoctorBySpecName(Long specId);
 }

@@ -14,6 +14,7 @@ import com.verusys.gourav.repository.IDoctorRepo;
 import com.verusys.gourav.service.IDoctorService;
 import com.verusys.gourav.service.IUserService;
 import com.verusys.gourav.util.MyCollectionsUtil;
+import com.verusys.gourav.util.MyMailUtil;
 import com.verusys.gourav.util.UserUtil;
 
 @Service
@@ -21,22 +22,36 @@ public class DoctorServiceImpl implements IDoctorService {
 
 	@Autowired
 	private IDoctorRepo repo;
-	
+
 	@Autowired
 	private IUserService userservice;
-	
+
 	@Autowired
 	private UserUtil util;
 
+	@Autowired
+	private MyMailUtil mailUtil;
+
 	@Override
 	public Long saveDoctor(Doctor doc) {
-		Long id=repo.save(doc).getId();
-		if(id!=null) {
-			User user=new User();
-			user.setDisplayName(doc.getFirstName()+" "+doc.getLastName());
+		Long id = repo.save(doc).getId();
+		if (id != null) {
+			String pwd = util.genPwd();
+			User user = new User();
+			user.setDisplayName(doc.getFirstName() + " " + doc.getLastName());
 			user.setUserName(doc.getEmail());
-			user.setPassword(util.getPwd());
+			user.setPassword(pwd);
 			user.setRole(UserRoles.DOCTOR.name());
+			Long genId = userservice.saveUser(user);
+			if (genId != null)
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						String text = "Your username is " + doc.getEmail() + " and password is " + pwd;
+						mailUtil.send(doc.getEmail(), "Doctor Added", text);
+					}
+				}).start();
 		}
 		return id;
 	}
@@ -69,5 +84,10 @@ public class DoctorServiceImpl implements IDoctorService {
 		List<Object[]> list = repo.getDocIdAndName();
 		Map<Long, String> map = MyCollectionsUtil.convertToMapIndex(list);
 		return map;
+	}
+
+	@Override
+	public List<Doctor> findDoctorBySpecName(Long specId) {
+		return repo.findDoctorBySpecName(specId);
 	}
 }
