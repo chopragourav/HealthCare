@@ -3,6 +3,8 @@ package com.verusys.gourav.service.impl;
 import java.util.Collections;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,6 +39,12 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
 		return repo.findByUserName(username);
 	}
 
+	@Transactional
+	public void updateUserPwd(String pwd, Long userId) {
+		String encPwd = passwordEncoder.encode(pwd);
+		repo.updateUserPwd(encPwd, userId);
+	}
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -50,4 +58,5 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
 
 		}
 	}
+
 }

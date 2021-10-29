@@ -12,4 +12,6 @@ public interface IUserService {
 
 	Optional<User> findByUserName(String username);
 
+	void updateUserPwd(String password, Long userId);
+
 }
