@@ -50,4 +50,9 @@ public class AppointmentServiceImpl implements IAppointmentService {
 		return repo.getAppoinmentsByDoctor(id);
 	}
 
+	@Override
+	public List<Object[]> getAppoinmentsByDoctorEmail(String userName) {
+		return repo.getAppoinmentsByDoctorEmail(userName);
+	}
+
 }

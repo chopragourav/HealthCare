@@ -15,13 +15,9 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
 </head>
 
-<nav th:fragment="menu"
-	class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav th:fragment="menu" class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<a class="navbar-brand" href="#">HealthCare</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse"
-		data-target="#navbarSupportedContent"
-		aria-controls="navbarSupportedContent" aria-expanded="false"
-		aria-label="Toggle navigation">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 
@@ -31,21 +27,21 @@
 
 			<!--Specialization START-->
 			<li class="nav-item dropdown" sec:authorize="hasAuthority('ADMIN')">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> Specialization </a>
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+				Specialization 
+				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" th:href="@{/spec/register}">Add</a> <a
-						class="dropdown-item" th:href="@{/spec/all}">View All</a>
+					<a class="dropdown-item" th:href="@{/spec/register}">Add</a> 
+					<a class="dropdown-item" th:href="@{/spec/all}">View All</a>
 				</div>
 			</li>
 			<!--Specialization END-->
 
 			<!--Doctor START-->
 			<li class="nav-item dropdown" sec:authorize="hasAuthority('ADMIN')">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> Doctor </a>
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+				Doctor 
+				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<a class="dropdown-item" th:href="@{/doctor/register}">Add</a> <a
 						class="dropdown-item" th:href="@{/doctor/all}">View All</a>
@@ -55,20 +51,19 @@
 
 
 			<!--Patient START-->
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> Patient </a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" th:href="@{/patient/register}"
-						sec:authorize="isAnonymous()">Add</a> <a class="dropdown-item"
-						th:href="@{/patient/all}" sec:authorize="hasAuthority('ADMIN')">View
-						All</a> <a class="dropdown-item" th:href="@{/patient/all}"
-						sec:authorize="hasAuthority('PATIENT')">My Profile</a>
-				</div></li>
-			<!--Patient END-->
-
-			<!--Appointment START-->
+      <li class="nav-item dropdown" sec:authorize="hasAuthority('ADMIN')">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Patient
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <!--<a class="dropdown-item" th:href="@{/patient/register}" sec:authorize="isAnonymous()">Add</a>-->
+          <a class="dropdown-item" th:href="@{/patient/all}" sec:authorize="hasAuthority('ADMIN')">View All</a>
+          <!--<a class="dropdown-item" th:href="@{/patient/all}" sec:authorize="hasAuthority('PATIENT')">My Profile</a>-->
+        </div>
+      </li>
+      <!--Patient END-->
+      
+      <!--Appointment START-->
        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Appointment
@@ -94,10 +89,11 @@
         </div>
       </li>
       <!--Appointment END-->
-
-		</ul>
-
-	</div>
+      
+     
+    </ul>
+    
+  </div>
 </nav>
 
 
