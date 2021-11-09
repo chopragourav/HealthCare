@@ -10,11 +10,11 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.verusys.gourav</groupId>
-	<artifactId>HealthCare</artifactId>
+	<artifactId>HealthCare1.0</artifactId>
 	<version>1.0</version>
 	<packaging>war</packaging>
-	<name>HealthCare</name>
-	<description>HealthCare Mini Project</description>
+	<name>HealthCare1.0</name>
+	<description>HealthCare1.0 Mini Project</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

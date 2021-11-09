@@ -1,17 +1,13 @@
 package com.verusys.gourav.exception;
 
-public class PatientNotFoundException extends RuntimeException {
+import java.lang.RuntimeException;
+import java.lang.String;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	public PatientNotFoundException() {
-		super();
-	}
-	
-	public PatientNotFoundException(String message){
-		super(message);
-	}
+public class PatientNotFoundException extends RuntimeException {
+  public PatientNotFoundException() {
+  }
+
+  public PatientNotFoundException(String message) {
+    super(message);
+  }
 }

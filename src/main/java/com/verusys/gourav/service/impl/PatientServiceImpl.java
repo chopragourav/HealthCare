@@ -4,50 +4,47 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.verusys.gourav.constant.UserRoles;
 import com.verusys.gourav.entity.Patient;
 import com.verusys.gourav.entity.User;
-import com.verusys.gourav.exception.PatientNotFoundException;
-import com.verusys.gourav.repository.PatientRepo;
+import com.verusys.gourav.repository.PatientRepository;
 import com.verusys.gourav.service.IPatientService;
 import com.verusys.gourav.service.IUserService;
 import com.verusys.gourav.util.MyMailUtil;
 import com.verusys.gourav.util.UserUtil;
 
+
 @Service
 public class PatientServiceImpl implements IPatientService {
-
 	@Autowired
-	private PatientRepo repo;
-
+	private PatientRepository repo;
 	@Autowired
-	private IUserService userservice;
-
+	private IUserService userService;
 	@Autowired
 	private UserUtil util;
 
 	@Autowired
-	private MyMailUtil mailUtil;
+	private MyMailUtil mailUtil ;
 
 	@Override
+	@Transactional
 	public Long savePatient(Patient patient) {
 		Long id = repo.save(patient).getId();
-		if (id != null) {
+		if(id!=null) {
 			String pwd = util.genPwd();
 			User user = new User();
-			user.setDisplayName(patient.getFirstName() + " " + patient.getLastName());
-			user.setUserName(patient.getEmail());
+			user.setDisplayName(patient.getFirstName()+" "+patient.getLastName());
+			user.setUsername(patient.getEmail());
 			user.setPassword(pwd);
 			user.setRole(UserRoles.PATIENT.name());
-			Long genId = userservice.saveUser(user);
-			if (genId != null)
+			Long genId  = userService.saveUser(user);
+			if(genId!=null)
 				new Thread(new Runnable() {
-
-					@Override
 					public void run() {
-						String text = "Your username is "+patient.getEmail()+" and password is "+pwd;
-						mailUtil.send(patient.getEmail(), "Patient Added", text);
+						String text = "Your name is " + patient.getEmail() +", password is "+ pwd;
+						mailUtil.send(patient.getEmail(), "PATIENT ADDED", text);
 					}
 				}).start();
 		}
@@ -55,25 +52,35 @@ public class PatientServiceImpl implements IPatientService {
 	}
 
 	@Override
+	@Transactional
+	public void updatePatient(Patient patient) {
+		repo.save(patient);
+	}
+
+	@Override
+	@Transactional
+	public void deletePatient(Long id) {
+		repo.deleteById(id);
+	}
+
+	@Override
+	@Transactional(
+			readOnly = true
+			)
+	public Patient getOnePatient(Long id) {
+		return repo.findById(id).get();
+	}
+
+	@Override
+	@Transactional(
+			readOnly = true
+			)
 	public List<Patient> getAllPatients() {
 		return repo.findAll();
 	}
-
+	
 	@Override
-	public void removePatient(Long id) {
-		repo.delete(getOnePatient(id));
-	}
-
-	@Override
-	public Patient getOnePatient(Long id) {
-		return repo.findById(id).orElseThrow(() -> new PatientNotFoundException("Patient with " + id + " not found"));
-	}
-
-	@Override
-	public void updatePatient(Patient patient) {
-		if (repo.existsById(patient.getId()))
-			repo.save(patient);
-		else
-			throw new PatientNotFoundException(patient.getId() + " , no found");
+	public Patient getOneByEmail(String email) {
+		return repo.findByEmail(email).get();
 	}
 }

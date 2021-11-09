@@ -12,43 +12,40 @@ import com.verusys.gourav.util.MyMailUtil;
 import com.verusys.gourav.util.UserUtil;
 
 @Component
-public class MasterAccountSetup implements CommandLineRunner {
+public class MasterAccountSetupRunner implements CommandLineRunner {
 
 	@Value("${master.user.name}")
 	private String displayName;
 	
 	@Value("${master.user.email}")
 	private String username;
-
+	
 	@Autowired
-	private IUserService userservice;
-
+	private IUserService userService;
+	
 	@Autowired
-	private UserUtil util;
-
+	private UserUtil userUtil;
+	
 	@Autowired
-	private MyMailUtil mailUtil;
-
-	@Override
+	private MyMailUtil mailUtil ;
+	
 	public void run(String... args) throws Exception {
-		if (!userservice.findByUserName(username).isPresent()) {
-			String pwd = util.genPwd();
+		if(!userService.findByUsername(username).isPresent()) {
+			String pwd = userUtil.genPwd();
 			User user = new User();
 			user.setDisplayName(displayName);
-			user.setUserName(username);
+			user.setUsername(username);
 			user.setPassword(pwd);
 			user.setRole(UserRoles.ADMIN.name());
-			Long genId = userservice.saveUser(user);
-			if (genId != null)
+			Long genId  = userService.saveUser(user);
+			if(genId!=null)
 				new Thread(new Runnable() {
-
-					@Override
 					public void run() {
-						String text = "Your username is " + username + " and password is " + pwd;
-						mailUtil.send(username, "Admin Added", text);
+						String text = "Your uname is " + username +", password is "+ pwd;
+						mailUtil.send(username, "ADMIN ADDED", text);
 					}
 				}).start();
 		}
-	}
+	}	
 
 }

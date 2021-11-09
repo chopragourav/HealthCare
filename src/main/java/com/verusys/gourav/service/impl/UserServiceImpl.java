@@ -3,8 +3,6 @@ package com.verusys.gourav.service.impl;
 import java.util.Collections;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.verusys.gourav.entity.User;
 import com.verusys.gourav.repository.UserRepository;
@@ -26,36 +25,42 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
 	@Autowired
 	private UserRepository repo;
 
-	@Override
 	public Long saveUser(User user) {
+		//read generated pwd
 		String pwd = user.getPassword();
-		String accPwd = passwordEncoder.encode(pwd);
-		user.setPassword(accPwd);
+		//enode password
+		String encPwd = passwordEncoder.encode(pwd);
+		//set back to object
+		user.setPassword(encPwd);
+
 		return repo.save(user).getId();
 	}
-
-	@Override
-	public Optional<User> findByUserName(String username) {
-		return repo.findByUserName(username);
-	}
-
+	
 	@Transactional
 	public void updateUserPwd(String pwd, Long userId) {
 		String encPwd = passwordEncoder.encode(pwd);
 		repo.updateUserPwd(encPwd, userId);
 	}
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public Optional<User> findByUsername(String username) {
+		return repo.findByUsername(username);
+	}
 
-		Optional<User> opt = findByUserName(username);
-		if (!opt.isPresent())
+	@Override
+	public UserDetails loadUserByUsername(String username)
+			throws UsernameNotFoundException {
+
+		Optional<User> opt = findByUsername(username);
+		if(!opt.isPresent()) 
 			throw new UsernameNotFoundException(username);
 		else {
 			User user = opt.get();
-			return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
-					Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
-
+			return new org.springframework.security.core.userdetails.User(
+					user.getUsername(), 
+					user.getPassword(), 
+					Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
+					);
+			
 		}
 	}
 

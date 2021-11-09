@@ -14,38 +14,37 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name = "appointment_tab")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "app_tab")
 public class Appointment {
 	@Id
-	@GeneratedValue
-	@Column(name = "app_id_col")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
-
+	
+	@ManyToOne
+	@JoinColumn(name="app_doc_id_fk_col")
+	private Doctor doctor;
+	
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Temporal(TemporalType.DATE)
-	@Column(name = "app_date_col")
+	@Column(name="app_dte_col")
 	private Date date;
-
-	@Column(name = "app_slots_col")
+	
+	@Column(name="app_slots_col")
 	private Integer noOfSlots;
-
-	@Column(name = "app_details_col")
+	
+	@Column(name="app_dtls_col")
 	private String details;
-
-	@Column(name = "app_fee_col")
-	private Float fee;
-
-	@ManyToOne
-	@JoinColumn(name = "app_id_fk_col")
-	private Doctor doctor;
+	
+	@Column(name="app_amt_col")
+	private Double fee;
 }

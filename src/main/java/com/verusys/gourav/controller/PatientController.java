@@ -16,6 +16,10 @@ import com.verusys.gourav.entity.Patient;
 import com.verusys.gourav.exception.PatientNotFoundException;
 import com.verusys.gourav.service.IPatientService;
 
+/**
+ * @author:RAGHU SIR 
+ *  Generated F/w:SHWR-Framework 
+ */
 @Controller
 @RequestMapping("/patient")
 public class PatientController {
@@ -30,7 +34,7 @@ public class PatientController {
 
 	@PostMapping("/save")
 	public String savePatient(@ModelAttribute Patient patient, Model model) {
-		Long id=service.savePatient(patient);
+		java.lang.Long id=service.savePatient(patient);
 		model.addAttribute("message","Patient created with Id:"+id);
 		model.addAttribute("patient",new Patient()) ;
 		return "PatientRegister";
@@ -48,7 +52,7 @@ public class PatientController {
 	@GetMapping("/delete")
 	public String deletePatient(@RequestParam Long id, RedirectAttributes attributes) {
 		try {
-			service.removePatient(id);
+			service.deletePatient(id);
 			attributes.addAttribute("message","Patient deleted with Id:"+id);
 		} catch(PatientNotFoundException e) {
 			e.printStackTrace() ;

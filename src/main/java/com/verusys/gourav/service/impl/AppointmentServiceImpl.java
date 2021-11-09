@@ -4,55 +4,63 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.verusys.gourav.entity.Appointment;
-import com.verusys.gourav.exception.AppointmentNotFoundException;
-import com.verusys.gourav.repository.AppointmentRepo;
+import com.verusys.gourav.repository.AppointmentRepository;
 import com.verusys.gourav.service.IAppointmentService;
+
 
 @Service
 public class AppointmentServiceImpl implements IAppointmentService {
-
 	@Autowired
-	private AppointmentRepo repo;
+	private AppointmentRepository repo;
 
 	@Override
-	public Long saveAppointment(Appointment app) {
-		return repo.save(app).getId();
+	@Transactional
+	public Long saveAppointment(Appointment appointment) {
+		return repo.save(appointment).getId();
 	}
 
 	@Override
-	public List<Appointment> getAllAppointment() {
+	@Transactional
+	public void updateAppointment(Appointment appointment) {
+		repo.save(appointment);
+	}
+
+	@Override
+	@Transactional
+	public void deleteAppointment(Long id) {
+		repo.deleteById(id);
+	}
+
+	@Override
+	@Transactional(
+			readOnly = true
+			)
+	public Appointment getOneAppointment(Long id) {
+		return repo.findById(id).get();
+	}
+
+	@Override
+	@Transactional(
+			readOnly = true
+			)
+	public List<Appointment> getAllAppointments() {
 		return repo.findAll();
 	}
-
+	
 	@Override
-	public void removeAppointment(Long id) {
-		repo.delete(getOneAppointment(id));
+	public List<Object[]> getAppoinmentsByDoctor(Long docId) {
+		return repo.getAppoinmentsByDoctor(docId);
 	}
-
-	@Override
-	public Appointment getOneAppointment(Long id) {
-		return repo.findById(id)
-				.orElseThrow(() -> new AppointmentNotFoundException("Appointment with " + id + " not found"));
-	}
-
-	@Override
-	public void updateAppointment(Appointment app) {
-		if (repo.existsById(app.getId()))
-			repo.save(app);
-		else
-			throw new AppointmentNotFoundException(app.getId() + " , not found");
-	}
-
-	@Override
-	public List<Object[]> getAppoinmentsByDoctor(Long id) {
-		return repo.getAppoinmentsByDoctor(id);
-	}
-
+	
 	@Override
 	public List<Object[]> getAppoinmentsByDoctorEmail(String userName) {
 		return repo.getAppoinmentsByDoctorEmail(userName);
 	}
-
+	@Transactional
+	public void updateSlotCountForAppoinment(Long id, int count) {
+		repo.updateSlotCountForAppoinment(id, count);
+	}
 }

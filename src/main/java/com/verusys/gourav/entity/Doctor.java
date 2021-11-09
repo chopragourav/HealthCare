@@ -17,50 +17,42 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "doctor_tab")
+@Table(name="doctor_tab")
 public class Doctor {
+
 	@Id
+	@Column(name="doc_id_col")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "doc_id_col")
 	private Long id;
 	
-	@Column(name = "doc_fn_col")
+	@Column(name="doc_fn_col")
 	private String firstName;
 	
-	@Column(name = "doc_ln_col")
+	@Column(name="doc_ln_col")
 	private String lastName;
 	
-	@Column(name = "doc_email_col")
+	@Column(name="doc_mail_col")
 	private String email;
 	
-	@Column(name = "doc_addrs_col")
+	@Column(name="doc_addr_col")
 	private String address;
 	
-	@Column(name = "doc_mobile_col")
-	private Long mobile;
+	@Column(name="doc_mob_col")
+	private String mobile;
 	
-	@Column(name = "doc_gender_col")
+	@Column(name="doc_gen_col")
 	private String gender;
 	
-	@Column(name = "doc_note_col")
+	@Column(name="doc_note_col")
 	private String note;
 	
-	@Column(name = "doc_image_col")
+	@Column(name="doc_img_col")
 	private String photoLoc;
 	
+	
+	//----------Association Mapping------------------
 	@ManyToOne
-	@JoinColumn(name = "doc_id_fk_col")
-	private Specialization specialization; 
+	@JoinColumn(name="spec_id_fk_col")
+	private Specialization specialization; //HAS-A
 	
-	/*@Column(name = "doc_photo_col")
-	private String photos;
-	
-	@Transient
-	private String photosImagePath;
-	
-	public String getPhotosImagePath() {
-		if (photos == null || id == null) return null;
-		return "/user-photos/" + id + "/" + photos;
-		}*/
 }
-

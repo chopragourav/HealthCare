@@ -9,9 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import com.verusys.gourav.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-	Optional<User> findByUserName(String username);
 
+	Optional<User> findByUsername(String username);
+	
 	@Modifying
 	@Query("UPDATE User SET password=:encPwd WHERE id=:userId")
-	void updateUserPwd(String encPwd, Long userId);
+	void updateUserPwd(String encPwd,Long userId);
 }

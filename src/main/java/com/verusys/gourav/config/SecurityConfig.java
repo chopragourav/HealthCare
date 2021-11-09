@@ -16,36 +16,42 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-
+	
 	@Autowired
 	private UserDetailsService userDetailsService;
-
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+		auth
+		.userDetailsService(userDetailsService)
+		.passwordEncoder(passwordEncoder);
 	}
-
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/spec/**").hasAuthority(UserRoles.ADMIN.name())
-				.antMatchers("/patient/register", "/patient/save").permitAll()
-				.antMatchers("/patient/all").hasAuthority(UserRoles.ADMIN.name())
-				.antMatchers("/doctor/**").hasAuthority(UserRoles.ADMIN.name())
-				.antMatchers("/appointment/register", "/appointment/save", "appointment/all")	.hasAuthority(UserRoles.ADMIN.name())
-				.antMatchers("/patient/edit", "/appointment/view", "/appointment/viewSlot").hasAuthority(UserRoles.PATIENT.name())
-				.antMatchers("/user/login","/login").permitAll()
-				.anyRequest().authenticated()
-
-				.and().formLogin()
-				.loginPage("/user/login")
-				.loginProcessingUrl("/login")
-				.defaultSuccessUrl("/user/setup", true)
-				.failureUrl("/user/login?error=true")
-
-				.and()
-				.logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/user/login?logout=true");
+		.antMatchers("/patient/register","/patient/save","/user/showForgot","/user/genNewPwd").permitAll()
+		.antMatchers("/spec/**").hasAuthority(UserRoles.ADMIN.name())
+		.antMatchers("/doctor/**").hasAuthority(UserRoles.ADMIN.name())
+		.antMatchers("/appointment/register","/appointment/save","/appointment/all").hasAuthority(UserRoles.ADMIN.name())
+		.antMatchers("/appointment/view","/appointment/viewSlot").hasAuthority(UserRoles.PATIENT.name())
+		.antMatchers("/slots/book","/slots/cancel").hasAuthority(UserRoles.PATIENT.name())
+		.antMatchers("/slots/all","/slots/accept","/slots/reject").hasAuthority(UserRoles.ADMIN.name())
+		.antMatchers("/user/login","/login").permitAll()
+		
+		.anyRequest().authenticated()
+		
+		.and()
+		.formLogin()
+		.loginPage("/user/login") //show Login Page
+		.loginProcessingUrl("/login") //POST (do login)
+		.defaultSuccessUrl("/user/setup",true)
+		.failureUrl("/user/login?error=true") //If login is failed
+		
+		.and()
+		.logout()
+		.logoutRequestMatcher(new AntPathRequestMatcher("/logout")) //URL for Logout
+		.logoutSuccessUrl("/user/login?logout=true") // On logout success
+		;
 	}
 }

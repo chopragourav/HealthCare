@@ -13,32 +13,33 @@ import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
 import com.verusys.gourav.entity.Specialization;
 
-
 public class SpecializationExcelView extends AbstractXlsxView {
 
 	@Override
-	protected void buildExcelDocument(Map<String, Object> model,
+	protected void buildExcelDocument(
+			Map<String, Object> model, 
 			Workbook workbook, 
 			HttpServletRequest request,
 			HttpServletResponse response) 
 					throws Exception {
 
-		// 1. define your own excel file name
+		//1. define your own excel file name
 		response.addHeader("Content-Disposition", "attachment;filename=SPECS.xlsx");
-
-		// 2. read data given by Controller
+		
+		//2. read data given by Controller
 		@SuppressWarnings("unchecked")
 		List<Specialization> list = (List<Specialization>) model.get("list");
-
-		// 3. create one sheet
+		
+		//3. create one sheet
 		Sheet sheet = workbook.createSheet("SPECIALIZATION");
-
-		// 4. create row#0 as header
+		
+		//4. create row#0 as header
 		setHead(sheet);
-
-		// 5. create row#1 onwards from List<T>
-		setBody(sheet, list);
+		
+		//5. create row#1 onwards from List<T> 
+		setBody(sheet,list);
 	}
+
 
 	private void setHead(Sheet sheet) {
 		Row row = sheet.createRow(0);
@@ -47,10 +48,10 @@ public class SpecializationExcelView extends AbstractXlsxView {
 		row.createCell(2).setCellValue("NAME");
 		row.createCell(3).setCellValue("NOTE");
 	}
-
+	
 	private void setBody(Sheet sheet, List<Specialization> list) {
 		int rowNum = 1;
-		for (Specialization spec : list) {
+		for(Specialization spec : list) {
 			Row row = sheet.createRow(rowNum++);
 			row.createCell(0).setCellValue(spec.getId());
 			row.createCell(1).setCellValue(spec.getSpecCode());

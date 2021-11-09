@@ -4,12 +4,17 @@ import java.util.List;
 
 import com.verusys.gourav.entity.Appointment;
 
+/**
+ * @author:RAGHU SIR 
+ *  Generated F/w:SHWR-Framework 
+ */
 public interface IAppointmentService {
-	public Long saveAppointment(Appointment app);
-	public List<Appointment> getAllAppointment();
-	public void removeAppointment(Long id);
-	public Appointment getOneAppointment(Long id);
-	public void updateAppointment(Appointment app);
-	public List<Object[]> getAppoinmentsByDoctor(Long id);
+	Long saveAppointment(Appointment appointment);
+	void updateAppointment(Appointment appointment);
+	void deleteAppointment(Long id);
+	Appointment getOneAppointment(Long id);
+	List<Appointment> getAllAppointments();
+	List<Object[]> getAppoinmentsByDoctor(Long docId);
 	List<Object[]> getAppoinmentsByDoctorEmail(String userName);
+	void updateSlotCountForAppoinment(Long id,int count);
 }
