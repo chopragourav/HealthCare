@@ -16,8 +16,9 @@
 	<name>HealthCare1.0</name>
 	<description>HealthCare1.0 Mini Project</description>
 	<properties>
-		<java.version>11</java.version>
-	</properties>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+</properties>
 	<dependencies>
 		<!-- For Charts -->
 		<dependency>
