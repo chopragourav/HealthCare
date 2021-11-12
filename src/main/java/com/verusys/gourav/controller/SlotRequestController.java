@@ -4,23 +4,36 @@ import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.verusys.gourav.constant.SlotStatus;
 import com.verusys.gourav.entity.Appointment;
+import com.verusys.gourav.entity.Doctor;
 import com.verusys.gourav.entity.Patient;
 import com.verusys.gourav.entity.SlotRequest;
 import com.verusys.gourav.entity.User;
+import com.verusys.gourav.exception.DoctorNotFoundException;
+import com.verusys.gourav.exception.PatientNotFoundException;
+import com.verusys.gourav.exception.SlotsNotFoundException;
 import com.verusys.gourav.service.IAppointmentService;
+import com.verusys.gourav.service.IDoctorService;
 import com.verusys.gourav.service.IPatientService;
 import com.verusys.gourav.service.ISlotRequestService;
+import com.verusys.gourav.service.ISpecializationService;
+import com.verusys.gourav.util.AdminDashboardUtil;
+import com.verusys.gourav.view.InvoiceSlipPdfView;
 
 @Controller
 @RequestMapping("/slots")
@@ -34,6 +47,19 @@ public class SlotRequestController {
 
 	@Autowired
 	private IPatientService patientService;
+	
+	@Autowired
+	private IDoctorService doctorService;
+	
+	@Autowired
+	private ISpecializationService specializationService;
+	
+	@Autowired
+	private AdminDashboardUtil util;
+	
+	@Autowired
+	private ServletContext context;
+	
 
 	// patient id, appointment id
 	@GetMapping("/book")
@@ -141,5 +167,43 @@ public class SlotRequestController {
 		return "redirect:patient";
 	}
 
+	@GetMapping("/dashboard")
+	public String adminDashboard(Model model) 
+	{
+		model.addAttribute("doctors",doctorService.getDoctorCount());
+		model.addAttribute("patients",patientService.getPatientCount());
+		model.addAttribute("appointments",appointmentService.getAppointmentCount());
+		model.addAttribute("specialization",specializationService.getSpecializationCount());
 
+		String path = context.getRealPath("/"); //root folder
+		
+		List<Object[]> list = service.getSlotsStatusAndCount();
+		util.generateBar(path, list);
+		util.generatePie(path, list);
+		return "AdminDashboard";
+	}
+
+	@GetMapping("/invoice")
+	public ModelAndView generateInvoice(
+			@RequestParam Long id
+			) 
+	{
+		ModelAndView m = new ModelAndView();
+		m.setView(new InvoiceSlipPdfView());
+		SlotRequest slotRequest=service.getOneSlotRequest(id);
+		m.addObject("slotRequest", slotRequest);
+		return m;
+	}
+
+	@GetMapping("/delete")
+	public String deletePatient(@RequestParam Long id, RedirectAttributes attributes) {
+		try {
+			service.removeSlots(id);
+			attributes.addAttribute("message","Slot deleted with Id:"+id);
+		} catch(SlotsNotFoundException e) {
+			e.printStackTrace() ;
+			attributes.addAttribute("message",e.getMessage());
+		}
+		return "redirect:all";
+	}
 }

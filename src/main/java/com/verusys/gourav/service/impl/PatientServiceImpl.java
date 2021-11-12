@@ -15,7 +15,10 @@ import com.verusys.gourav.service.IUserService;
 import com.verusys.gourav.util.MyMailUtil;
 import com.verusys.gourav.util.UserUtil;
 
-
+/**
+ * @author:GOURAV CHOPRA 
+ *  Generated F/w:SHWR-Framework 
+ */
 @Service
 public class PatientServiceImpl implements IPatientService {
 	@Autowired
@@ -82,5 +85,10 @@ public class PatientServiceImpl implements IPatientService {
 	@Override
 	public Patient getOneByEmail(String email) {
 		return repo.findByEmail(email).get();
+	}
+	
+	@Override
+	public long getPatientCount() {
+		return repo.count();
 	}
 }

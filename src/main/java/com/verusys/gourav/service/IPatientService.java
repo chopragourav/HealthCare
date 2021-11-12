@@ -4,7 +4,10 @@ import java.util.List;
 
 import com.verusys.gourav.entity.Patient;
 
-
+/**
+ * @author:GOURAV CHOPRA 
+ *  Generated F/w:SHWR-Framework 
+ */
 public interface IPatientService {
 	Long savePatient(Patient patient);
 
@@ -17,4 +20,6 @@ public interface IPatientService {
 	List<Patient> getAllPatients();
 	
 	Patient getOneByEmail(String email);
+	
+	long getPatientCount();
 }

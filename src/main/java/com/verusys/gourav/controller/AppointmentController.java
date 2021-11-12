@@ -22,7 +22,7 @@ import com.verusys.gourav.service.IDoctorService;
 import com.verusys.gourav.service.ISpecializationService;
 
 /**
- * @author:RAGHU SIR 
+ * @author:GOURAV CHOPRA 
  *  Generated F/w:SHWR-Framework 
  */
 @Controller

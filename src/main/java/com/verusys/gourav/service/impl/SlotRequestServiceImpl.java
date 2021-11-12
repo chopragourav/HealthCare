@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.verusys.gourav.constant.SlotStatus;
 import com.verusys.gourav.entity.SlotRequest;
+import com.verusys.gourav.exception.DoctorNotFoundException;
+import com.verusys.gourav.exception.SlotsNotFoundException;
 import com.verusys.gourav.repository.SlotRequestRepository;
 import com.verusys.gourav.service.ISlotRequestService;
 
@@ -47,5 +49,28 @@ public class SlotRequestServiceImpl implements ISlotRequestService {
 	public List<SlotRequest> viewSlotsByDoctorMail(String doctorMail) {
 		return repo.getAllDoctorSlots(doctorMail,SlotStatus.ACCEPTED.name());
 	}
+	
+	@Override
+	public List<Object[]> getSlotsStatusAndCount() {
+		return repo.getSlotsStatusAndCount();
+	}
 
+	@Override
+	public void removeSlots(Long id) {
+			repo.delete(getOneSlot(id));
+	}
+
+	@Override
+	public SlotRequest getOneSlot(Long id) {
+		return repo.findById(id).orElseThrow(
+				()-> new SlotsNotFoundException(id+", not exist"));
+	}
+
+	@Override
+	public void updateSLots(SlotRequest sr) {
+		if(repo.existsById(sr.getId()))
+			repo.save(sr);
+		else
+			throw new SlotsNotFoundException(sr.getId()+", not exist");
+	}
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import com.verusys.gourav.entity.Appointment;
 
 /**
- * @author:RAGHU SIR 
+ * @author:GOURAV CHOPRA 
  *  Generated F/w:SHWR-Framework 
  */
 public interface IAppointmentService {
@@ -17,4 +17,5 @@ public interface IAppointmentService {
 	List<Object[]> getAppoinmentsByDoctor(Long docId);
 	List<Object[]> getAppoinmentsByDoctorEmail(String userName);
 	void updateSlotCountForAppoinment(Long id,int count);
+	long getAppointmentCount();
 }

@@ -10,7 +10,10 @@ import com.verusys.gourav.entity.Appointment;
 import com.verusys.gourav.repository.AppointmentRepository;
 import com.verusys.gourav.service.IAppointmentService;
 
-
+/**
+ * @author:GOURAV CHOPRA 
+ *  Generated F/w:SHWR-Framework 
+ */
 @Service
 public class AppointmentServiceImpl implements IAppointmentService {
 	@Autowired
@@ -62,5 +65,9 @@ public class AppointmentServiceImpl implements IAppointmentService {
 	@Transactional
 	public void updateSlotCountForAppoinment(Long id, int count) {
 		repo.updateSlotCountForAppoinment(id, count);
+	}
+	@Override
+	public long getAppointmentCount() {
+		return repo.count();
 	}
 }

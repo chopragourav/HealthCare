@@ -78,7 +78,15 @@ public class UserController {
 		
 		//make service call
 		service.updateUserPwd(password, userId);
-		// TODO : EMAIL TASK
+		if (userId != null) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					String text = "Your username is " + user.getUsername() + " and updated password is " + password;
+					mailUtil.send(user.getUsername(), "Password Changed", text);
+				}
+			}).start();
+		}
 		model.addAttribute("message", "Password Updated!");
 		return "UserPwdUpdate";
 		//return "redirect:logout"

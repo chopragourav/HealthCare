@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.verusys.gourav.entity.Patient;
 
 /**
- * @author:RAGHU SIR 
+ * @author:GOURAV CHOPRA 
  *  Generated F/w:SHWR-Framework 
  */
 public interface PatientRepository extends JpaRepository<Patient, Long> {

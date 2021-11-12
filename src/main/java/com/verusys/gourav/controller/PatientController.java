@@ -17,7 +17,7 @@ import com.verusys.gourav.exception.PatientNotFoundException;
 import com.verusys.gourav.service.IPatientService;
 
 /**
- * @author:RAGHU SIR 
+ * @author:GOURAV CHOPRA 
  *  Generated F/w:SHWR-Framework 
  */
 @Controller

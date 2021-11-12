@@ -53,7 +53,7 @@
 					<td th:text="${ob[1]}"></td>
 					
 					<td>
-						<a th:href="@{/doc/delete(id=${ob[0]})}" onclick="confirm('Do you want to delete it?')" class="btn btn-danger"> DELETE <i class="fa fa-trash-o" aria-hidden="true"></i> </a>|
+						<a th:href="@{/doc/delete(id=${ob[0]})}" class="btn btn-danger"> DELETE <i class="fa fa-trash-o" aria-hidden="true"></i> </a>|
 						<a th:href="@{/doc/download(id=${ob[0]})}" class="btn btn-warning">DOWNLOAD <i class="fa fa-cloud-download" aria-hidden="true"></i></a>
 					</td>
 				</tr>

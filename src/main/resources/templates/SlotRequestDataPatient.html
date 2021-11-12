@@ -12,7 +12,7 @@
             <div class="card-body">
                 <table class="table table-hover">
                     <tr class="bg-info text-white">
-                    	<th> </th>
+                    	<th>ID</th>
                         <th>DATE</th>
                         <th>DOCTOR</th>
                         <th>STATUS</th>
@@ -27,7 +27,8 @@
                     	</td>
                     	<td>
                     		<th:block th:if="${ob.status=='ACCEPTED'}">
-                    			<a th:href="@{/slots/cancel(id=${ob.id})}" class="btn btn-danger">CANCEL </a>
+                           		<a th:href="@{/slots/cancel(id=${ob.id})}"onclick="confirm('Do you want to cancel it?')" class="btn btn-danger">CANCEL <i class="fa fa-ban" aria-hidden="true"></i> </a> |
+                    			<a th:href="@{/slots/invoice(id=${ob.id})}" class="btn btn-warning">INVOICE <i class="fa fa-print" aria-hidden="true"></i> </a>
                     		</th:block>
                     	</td>
                     </tr>

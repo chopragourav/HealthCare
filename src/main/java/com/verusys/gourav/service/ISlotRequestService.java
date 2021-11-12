@@ -19,4 +19,10 @@ public interface ISlotRequestService {
 	
 	//DOCTOR can see his slots
 	List<SlotRequest> viewSlotsByDoctorMail(String doctorMail);
+	
+	List<Object[]> getSlotsStatusAndCount();
+	
+	public void removeSlots(Long id);
+	public SlotRequest getOneSlot(Long id);
+	public void updateSLots(SlotRequest sr);
 }

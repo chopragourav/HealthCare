@@ -21,6 +21,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author:RAGHU SIR 
+ *  Generated F/w:SHWR-Framework 
+ */
 @Entity
 @Table(name = "patient_tab")
 @Data

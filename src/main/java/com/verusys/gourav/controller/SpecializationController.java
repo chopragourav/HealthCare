@@ -1,9 +1,11 @@
 package com.verusys.gourav.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import com.verusys.gourav.entity.Specialization;
 import com.verusys.gourav.exception.SpecializationNotFoundException;
 import com.verusys.gourav.service.ISpecializationService;
 import com.verusys.gourav.view.SpecializationExcelView;
+import com.verusys.gourav.view.SpecializationPdfView;
 
 @Controller
 @RequestMapping("/spec")
@@ -26,7 +29,7 @@ public class SpecializationController {
 
 	@Autowired
 	private ISpecializationService service;
-	
+
 	/***
 	 * 1. Show Register page
 	 */
@@ -34,7 +37,7 @@ public class SpecializationController {
 	public String displayRegister() {
 		return "SpecializationRegister";
 	}
-	
+
 	/**
 	 * 2. On Submit Form save data
 	 */
@@ -49,11 +52,11 @@ public class SpecializationController {
 		model.addAttribute("message", message);
 		return "SpecializationRegister";
 	}
-	
+
 	/**
 	 * 3. display all Specializations
 	 */
-	@GetMapping("/all")
+	//@GetMapping("/all")
 	public String viewAll(
 			Model model,
 			@RequestParam(value = "message",required = false) String message
@@ -64,7 +67,22 @@ public class SpecializationController {
 		model.addAttribute("message", message);
 		return "SpecializationData";
 	}
-	
+	//... /all?page=3
+	@GetMapping("/all")
+	public String viewAllPageable(
+			@PageableDefault(page = 0, size = 3) Pageable pageable,
+			Model model,
+			@RequestParam(value = "message",required = false) String message
+			)
+	{
+
+		Page<Specialization> page = service.getAllSpecializations(pageable);
+		model.addAttribute("list",page.getContent());
+		model.addAttribute("page",page);
+		model.addAttribute("message", message);
+		return "SpecializationData";
+	}
+
 	/**
 	 * 4. Delete by id
 	 */
@@ -83,7 +101,7 @@ public class SpecializationController {
 		}
 		return "redirect:all";
 	}
-	
+
 	/**
 	 * 5. Fetch Data into Edit page
 	 *  End user clicks on Link, may enter ID manually.
@@ -114,7 +132,7 @@ public class SpecializationController {
 		}
 		return page;
 	}
-	
+
 	/***
 	 * 6. Update Form data and redirect to all
 	 */
@@ -128,7 +146,7 @@ public class SpecializationController {
 		attributes.addAttribute("message", "Record ("+specialization.getId()+") is updated");
 		return "redirect:all";
 	}
-	
+
 	/**
 	 * 7. Read code and check with service
 	 *    Return message back to UI 
@@ -146,10 +164,10 @@ public class SpecializationController {
 		} else if(id!=0 && service.isSpecCodeExistForEdit(code,id)) { //edit check
 			message = code + ", already exist";
 		} 
-		
+
 		return message; //this is not viewName(it is message)
 	}
-	
+
 	/***
 	 * 8. export data to excel file
 	 */
@@ -157,12 +175,29 @@ public class SpecializationController {
 	public ModelAndView exportToExcel() {
 		ModelAndView m =  new ModelAndView();
 		m.setView(new SpecializationExcelView());
+
+		//read data from DB
+		List<Specialization> list = service.getAllSpecializations();
+		//send to Excel Impl class
+		m.addObject("list", list);
+
+		return m;
+	}
+
+
+	/***
+	 * 9. export data to PDF file
+	 */
+	@GetMapping("/pdf")
+	public ModelAndView exportToPdf() {
+		ModelAndView m = new ModelAndView();
+		m.setView(new SpecializationPdfView());
 		
 		//read data from DB
 		List<Specialization> list = service.getAllSpecializations();
 		//send to Excel Impl class
 		m.addObject("list", list);
-		
+
 		return m;
 	}
 }
