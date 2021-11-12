@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HealthCare1Application {
+public class HealthCareApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HealthCare1Application.class, args);
+		SpringApplication.run(HealthCareApplication.class, args);
 	}
 }
