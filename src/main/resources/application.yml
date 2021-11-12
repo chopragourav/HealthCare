@@ -1,32 +1,32 @@
 server:
   port: 80
-  
 master:
- user:
-  name: Gourav Chopra
-  email: gouravchopra2019@gmail.com
-  
+  user:
+    name: Gourav Chopra
+    email: gouravchopra2019@gmail.com
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/health1.0
-    username: root
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
     password: root
-  
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
-      
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
   mail:
     host: smtp.gmail.com
     port: 587
     username: myjrtpdisk
     password: Chprgourav@100
     properties:
-     mail:
-      smtp:
-       starttls:
-         enable: true
-             
+      mail:
+        smtp:
+          starttls:
+            enable: true
